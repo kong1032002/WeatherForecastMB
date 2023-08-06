@@ -1,25 +1,22 @@
 package com.example.weatherapp.model;
 
-public class WeatherForecast {
+public class Weather {
     private String time;
     private String temperature;
-
     private String description;
-
     private String main;
     private String icon;
-
     private String city;
     private String airQuality;
 
     private boolean night;
-    public WeatherForecast(String time, String temperature, String icon) {
+    public Weather(String time, String temperature, String icon) {
         this.icon = icon;
         this.time = time;
         this.temperature = temperature;
     }
 
-    public WeatherForecast(String city, String temperature, String description, String icon, String airQuality, String main, boolean night) {
+    public Weather(String city, String temperature, String description, String icon, String airQuality, String main, boolean night) {
         this.city = city;
         this.description = description;
         this.temperature = temperature;
@@ -44,7 +41,6 @@ public class WeatherForecast {
     public String getDescription() {
         return description;
     }
-
 
     public String getIcon() {
         return icon;

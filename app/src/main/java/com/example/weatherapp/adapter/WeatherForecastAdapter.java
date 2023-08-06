@@ -5,14 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weatherapp.R;
-import com.example.weatherapp.model.WeatherForecast;
+import com.example.weatherapp.model.Weather;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -23,9 +22,9 @@ import java.util.Date;
 
 public class WeatherForecastAdapter extends RecyclerView.Adapter<WeatherForecastAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<WeatherForecast> weatherForecastArrayList;
+    private ArrayList<Weather> weatherForecastArrayList;
 
-    public WeatherForecastAdapter(Context context, ArrayList<WeatherForecast> weatherForecastArrayList) {
+    public WeatherForecastAdapter(Context context, ArrayList<Weather> weatherForecastArrayList) {
         this.context = context;
         this.weatherForecastArrayList = weatherForecastArrayList;
     }
@@ -39,7 +38,7 @@ public class WeatherForecastAdapter extends RecyclerView.Adapter<WeatherForecast
 
     @Override
     public void onBindViewHolder(@NonNull WeatherForecastAdapter.ViewHolder holder, int position) {
-        WeatherForecast model = weatherForecastArrayList.get(position);
+        Weather model = weatherForecastArrayList.get(position);
         if(model == null) {
             return;
         }

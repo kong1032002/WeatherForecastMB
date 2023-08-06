@@ -9,13 +9,15 @@
     <!-- TODO: Update blank fragment layout -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_cloudy">
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:background="@android:color/darker_gray"
+            android:background="#4D000000"
+
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -25,14 +27,15 @@
                 android:id="@+id/textWeather"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="10"
                 android:layout_marginTop="5dp"
+                android:layout_weight="10"
+                android:gravity="center"
                 android:paddingLeft="15dp"
                 android:paddingTop="6dp"
-                android:text="My Cities"
+                android:text="Favorite cities"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="#FFFFFF"
                 android:textSize="30sp"
-
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.272"
                 app:layout_constraintStart_toStartOf="parent"
@@ -43,16 +46,16 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCitiesList"
-            android:layout_width="match_parent"
-            android:layout_height="490dp"
+            android:layout_width="423dp"
+            android:layout_height="546dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.478"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            app:layout_constraintVertical_bias="0.666"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="10dp"/>
+            app:layout_constraintVertical_bias="0.666" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

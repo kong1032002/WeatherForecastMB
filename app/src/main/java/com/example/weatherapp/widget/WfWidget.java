@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,10 +18,9 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.AppWidgetTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.example.weatherapp.DetailActivity;
 import com.example.weatherapp.MainActivity;
 import com.example.weatherapp.R;
-import com.example.weatherapp.model.WeatherForecast;
+import com.example.weatherapp.model.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,7 +29,7 @@ import org.json.JSONObject;
 /**
  * Implementation of App Widget functionality.
  */
-public class WFwidget extends AppWidgetProvider {
+public class WfWidget extends AppWidgetProvider {
     public static final String WIDGET_IDS_KEY ="mywidgetproviderwidgetids";
 
     public static final String ACTION_WIDGET_CLICK = "com.example.weatherapp.widget.WIDGET_CLICK";
@@ -40,9 +38,9 @@ public class WFwidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId, String city) {
-        getWeather(city, context, new MyWeatherCallBack() {
+        getWeather(city, context, new WeatherCallBack() {
             @Override
-            public void onSuccess(WeatherForecast weatherForecast) {
+            public void onSuccess(Weather weatherForecast) {
                 // Construct the RemoteViews object
                 RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.w_fwidget);
 
@@ -103,7 +101,7 @@ public class WFwidget extends AppWidgetProvider {
                 RemoteViews views = new RemoteViews(context.getPackageName(),R.layout.w_fwidget);
 
                 Intent configIntent = new Intent(context, MainActivity.class);
-                configIntent.setAction(WFwidget.ACTION_WIDGET_CLICK);
+                configIntent.setAction(WfWidget.ACTION_WIDGET_CLICK);
                 configIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
                 stackBuilder.addNextIntentWithParentStack(configIntent);
@@ -128,7 +126,7 @@ public class WFwidget extends AppWidgetProvider {
         super.onReceive(context, intent);
         if (intent.getAction().equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE) ||
                 intent.getAction().equals(WIDGET_IDS_KEY) ||
-                intent.getAction().equals(WFwidget.ACTION_WIDGET_CLICK)) {
+                intent.getAction().equals(WfWidget.ACTION_WIDGET_CLICK)) {
             int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
             onUpdate(context, AppWidgetManager.getInstance(context), appWidgetIds);
         }
@@ -144,7 +142,7 @@ public class WFwidget extends AppWidgetProvider {
         // Enter relevant functionality for when the last widget is disabled
     }
 
-    public static void getWeather(String city, Context context, MyWeatherCallBack callback) {
+    public static void getWeather(String city, Context context, WeatherCallBack callback) {
         final String API_KEY = "bffca17bcb552b8c8e4f3b82f64cccd2";
         String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + API_KEY;
 
@@ -174,7 +172,7 @@ public class WFwidget extends AppWidgetProvider {
                                     try {
                                         String airQualityIndex = aqiResponse.getJSONArray("list").getJSONObject(0).getJSONObject("main").getString("aqi");
                                         airQualityIndex = getAqiCategory(Double.parseDouble(airQualityIndex));
-                                        WeatherForecast wf = new WeatherForecast(city, finalTemperature, finalDescription, icon, airQualityIndex, main, night);
+                                        Weather wf = new Weather(city, finalTemperature, finalDescription, icon, airQualityIndex, main, night);
                                         callback.onSuccess(wf);
                                     } catch (JSONException e) {
                                         e.printStackTrace();

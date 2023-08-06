@@ -1,9 +1,7 @@
 package com.example.weatherapp.fragment;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -33,12 +31,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.weatherapp.R;
 import com.example.weatherapp.adapter.WeatherForecastAdapter;
-import com.example.weatherapp.model.WeatherForecast;
+import com.example.weatherapp.model.Weather;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.Priority;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
@@ -64,7 +61,7 @@ public class HomeFragment extends Fragment {
     ScrollView bgLayout;
     TextView temptv, time, longitude, latitude, humidity, sunrise, sunset, pressure, wind, country, city_nam, max_temp, min_temp, feels, visibility, co, so2, pm2_5, air_quality;
     RecyclerView rvWeatherForecast;
-    private ArrayList<WeatherForecast> weatherForecastArrayList;
+    private ArrayList<Weather> weatherForecastArrayList;
     private WeatherForecastAdapter weatherForecastAdapter;
 
     public HomeFragment() {
@@ -273,7 +270,7 @@ public class HomeFragment extends Fragment {
                                 String time = forecastObj.getString("dt_txt");
                                 String temp =Integer.toString(forecastObj.getJSONObject("main").getInt("temp"));
                                 String icon = forecastObj.getJSONArray("weather").getJSONObject(0).getString("icon");
-                                weatherForecastArrayList.add(new WeatherForecast(time, temp, icon));
+                                weatherForecastArrayList.add(new Weather(time, temp, icon));
 
                             }
                             weatherForecastAdapter.notifyDataSetChanged();

@@ -1,6 +1,5 @@
 package com.example.weatherapp.widget;
 
-import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +17,7 @@ public class AppWidgetConfigurationActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "com.example.weatherapp.NewAppWidget";
     private static final String PREF_PREFIX_KEY = "appwidget_";
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+    private WFwidgetConfigureBinding binding;
     EditText mAppWidgetText;
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
@@ -27,11 +27,11 @@ public class AppWidgetConfigurationActivity extends AppCompatActivity {
             String widgetText = mAppWidgetText.getText().toString();
             saveTitlePref(context, mAppWidgetId, widgetText);
 
-            WFwidget.isCitySet = true;
+            WfWidget.isCitySet = true;
 
             // It is the responsibility of the configuration activity to update the app widget
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            WFwidget.updateAppWidget(context, appWidgetManager, mAppWidgetId, widgetText);
+            WfWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId, widgetText);
 
             // Make sure we pass back the original appWidgetId
             Intent resultValue = new Intent();
@@ -40,7 +40,6 @@ public class AppWidgetConfigurationActivity extends AppCompatActivity {
             finish();
         }
     };
-    private WFwidgetConfigureBinding binding;
 
     public AppWidgetConfigurationActivity() {
         super();

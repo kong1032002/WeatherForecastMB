@@ -23,7 +23,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.weatherapp.R;
 import com.example.weatherapp.adapter.WeatherForecastAdapter;
 import com.example.weatherapp.model.City;
-import com.example.weatherapp.model.WeatherForecast;
+import com.example.weatherapp.model.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +43,7 @@ public class DetailCityFragment extends Fragment {
     ScrollView bgLayout;
     TextView temptv, time, humidity, sunrise, sunset, pressure, wind, country, city_nam, max_temp, min_temp, feels, visibility, co, so2, pm2_5, air_quality;
     RecyclerView rvWeatherForecast;
-    private ArrayList<WeatherForecast> weatherForecastArrayList;
+    private ArrayList<Weather> weatherForecastArrayList;
     private WeatherForecastAdapter weatherForecastAdapter;
     private City city;
 
@@ -222,7 +222,7 @@ public class DetailCityFragment extends Fragment {
                                 String time = forecastObj.getString("dt_txt");
                                 String temp =Integer.toString(forecastObj.getJSONObject("main").getInt("temp"));
                                 String icon = forecastObj.getJSONArray("weather").getJSONObject(0).getString("icon");
-                                weatherForecastArrayList.add(new WeatherForecast(time, temp, icon));
+                                weatherForecastArrayList.add(new Weather(time, temp, icon));
 
                             }
                             weatherForecastAdapter.notifyDataSetChanged();

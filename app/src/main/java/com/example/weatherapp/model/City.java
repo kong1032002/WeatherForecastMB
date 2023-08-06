@@ -8,27 +8,21 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "city")
 public class City implements Serializable {
-
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String cityName;
-
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
-
     public City(String cityName) {
         this.cityName = cityName;
     }
-
     public String getCityName() {
         return cityName;
     }
-
     public void setCityName(String cityName) {
         this.cityName = cityName;
     }

@@ -8,7 +8,7 @@ appWidgetRadius attribute value
     <corners android:radius="40dp" />
     <gradient
         android:type="linear"
-        android:endColor="@color/light_blue_900"
-        android:startColor="@color/light_blue_600"
+        android:endColor="@android:color/transparent"
+        android:startColor="@android:color/transparent"
         android:angle="90" />
 </shape>

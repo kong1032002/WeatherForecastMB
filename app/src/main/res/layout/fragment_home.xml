@@ -25,7 +25,7 @@
                 android:padding="15dp"
                 android:text="@string/weather_app"
                 android:textColor="#FFFFFF"
-                android:textSize="30sp"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
