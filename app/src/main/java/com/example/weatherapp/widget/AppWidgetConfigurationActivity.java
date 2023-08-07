@@ -27,11 +27,11 @@ public class AppWidgetConfigurationActivity extends AppCompatActivity {
             String widgetText = mAppWidgetText.getText().toString();
             saveTitlePref(context, mAppWidgetId, widgetText);
 
-            WfWidget.isCitySet = true;
+            WeatherForecastWidget.isCitySet = true;
 
             // It is the responsibility of the configuration activity to update the app widget
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            WfWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId, widgetText);
+            WeatherForecastWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId, widgetText);
 
             // Make sure we pass back the original appWidgetId
             Intent resultValue = new Intent();

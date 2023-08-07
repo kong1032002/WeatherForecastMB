@@ -1,5 +1,6 @@
 package com.example.weatherapp.widget;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -7,9 +8,14 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationManager;
 import android.widget.RemoteViews;
 import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,7 +35,7 @@ import org.json.JSONObject;
 /**
  * Implementation of App Widget functionality.
  */
-public class WfWidget extends AppWidgetProvider {
+public class WeatherForecastWidget extends AppWidgetProvider {
     public static final String WIDGET_IDS_KEY ="mywidgetproviderwidgetids";
 
     public static final String ACTION_WIDGET_CLICK = "com.example.weatherapp.widget.WIDGET_CLICK";
@@ -101,7 +107,7 @@ public class WfWidget extends AppWidgetProvider {
                 RemoteViews views = new RemoteViews(context.getPackageName(),R.layout.w_fwidget);
 
                 Intent configIntent = new Intent(context, MainActivity.class);
-                configIntent.setAction(WfWidget.ACTION_WIDGET_CLICK);
+                configIntent.setAction(WeatherForecastWidget.ACTION_WIDGET_CLICK);
                 configIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
                 stackBuilder.addNextIntentWithParentStack(configIntent);
@@ -126,7 +132,7 @@ public class WfWidget extends AppWidgetProvider {
         super.onReceive(context, intent);
         if (intent.getAction().equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE) ||
                 intent.getAction().equals(WIDGET_IDS_KEY) ||
-                intent.getAction().equals(WfWidget.ACTION_WIDGET_CLICK)) {
+                intent.getAction().equals(WeatherForecastWidget.ACTION_WIDGET_CLICK)) {
             int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
             onUpdate(context, AppWidgetManager.getInstance(context), appWidgetIds);
         }
@@ -144,8 +150,39 @@ public class WfWidget extends AppWidgetProvider {
 
     public static void getWeather(String city, Context context, WeatherCallBack callback) {
         final String API_KEY = "bffca17bcb552b8c8e4f3b82f64cccd2";
-        String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + API_KEY;
+        double longitude = 0.0;
+        double latitude = 0.0;
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            // Xử lý khi đã có quyền truy cập vị trí
+            Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (lastKnownLocation == null) {
+                // Nếu không có vị trí được tìm thấy, bạn có thể yêu cầu update vị trí mới bằng cách sử dụng requestLocationUpdates
+                // locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                // Hoặc bạn cũng có thể thử với NETWORK_PROVIDER nếu GPS_PROVIDER không khả dụng:
+                // locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+                // Lưu ý rằng việc sử dụng NETWORK_PROVIDER sẽ không yêu cầu quyền truy cập vị trí chính xác, nhưng có thể chính xác không cao.
+            } else {
+                // Lấy latitude và longitude từ vị trí hiện tại
+                latitude = lastKnownLocation.getLatitude();
+                longitude = lastKnownLocation.getLongitude();
 
+                // Tạo mảng location chứa long và lat
+                double[] location = new double[]{longitude, latitude};
+
+                // Tiếp tục với xử lý dữ liệu vị trí
+                // ...
+
+                // Gọi hàm callback với vị trí đã lấy được
+//                callback.onSuccessWithLocation(location, wf); // Chỉnh sửa phần onSuccess của hàm callback để nhận thêm một tham số location kiểu double[]
+            }
+        } else {
+            // Yêu cầu quyền truy cập vị trí từ người dùng nếu chưa được cấp
+            // Có thể sử dụng EasyPermissions như đã được mô tả ở trên để xin quyền
+            // ...
+            // Và thêm hàm onRequestPermissionsResult để xử lý kết quả yêu cầu quyền
+        }
+        String url = "https://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon="+ longitude + "&appid=" + API_KEY;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
@@ -164,6 +201,7 @@ public class WfWidget extends AppWidgetProvider {
                         double lat_find = coorObj.getDouble("lat");
                         double long_find = coorObj.getDouble("lon");
                         String icon = weatherObj.getString("icon");
+                        String cityName = response.getString("name");
                         String aqiUrl = "https://api.openweathermap.org/data/2.5/air_pollution?lat=" + lat_find + "&lon=" + long_find + "&appid=" + API_KEY;
                         @SuppressLint("DefaultLocale") String finalTemperature = String.format("%.0f", temp);
                         String finalDescription = description;
@@ -172,7 +210,7 @@ public class WfWidget extends AppWidgetProvider {
                                     try {
                                         String airQualityIndex = aqiResponse.getJSONArray("list").getJSONObject(0).getJSONObject("main").getString("aqi");
                                         airQualityIndex = getAqiCategory(Double.parseDouble(airQualityIndex));
-                                        Weather wf = new Weather(city, finalTemperature, finalDescription, icon, airQualityIndex, main, night);
+                                        Weather wf = new Weather(cityName, finalTemperature, finalDescription, icon, airQualityIndex, main, night);
                                         callback.onSuccess(wf);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
